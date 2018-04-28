@@ -25,7 +25,7 @@ window.onload = () => {
         }
         h1.style.background = '#232323';
     })
-
+    //try commit
     colorDisplay.textContent = pickedColor;
 
     for (let i = 0; i < squares.length; i++) {
