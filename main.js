@@ -7,48 +7,82 @@ window.onload = () => {
     //     "rgb(0, 0, 255)",
     //     "rgb(255, 0, 255)",
     // ]
-    let arrColors = generateRandonColors(6);
-
+    let numSquares = 6;
+    let arrColors = [];
+    let pickedColor;
     let squares = document.querySelectorAll('.square');
-    let pickedColor = pickColor();
     let colorDisplay = document.getElementById('colorDisplay');
     let messageDisplay = document.getElementById('message');
     let h1 = document.querySelector('h1');
     let resetButton = document.querySelector("#reset");
+    let modeButtons = document.querySelectorAll(".mode");
 
-    resetButton.addEventListener('click', ()=>{
-        arrColors = generateRandonColors(6);
-        pickedColor = pickColor();
-        colorDisplay.textContent = pickedColor;
-        for(let i = 0; i < squares.length; i++){
-            squares[i].style.background = arrColors[i];
-        }
-        h1.style.background = '#232323';
-    })
-    //try commit
-    colorDisplay.textContent = pickedColor;
+    init();
 
-    for (let i = 0; i < squares.length; i++) {
-        squares[i].style.background = arrColors[i];
-        squares[i].addEventListener('click', function(){
-            let clickedColor = this.style.background;
-            if(clickedColor === pickedColor){
-                messageDisplay.textContent = "Correct!";
-                resetButton.textContent = "Play Again?";
-                changeColor(clickedColor);
-                h1.style.background = clickedColor;
-            } 
-            else {
-                this.style.background = "#232323";
-                messageDisplay.textContent = "Try again";
-            }
-        })
+    function init(){
+        setupModeButtons();
+        setupSquares();
+        reset();
     }
 
-    function changeColor(color){
-        for(let i = 0; i < squares.length; i++){
-            squares[i].style.background = color;
+    function setupModeButtons(){
+        for (let i = 0; i < modeButtons.length; i++) {
+            modeButtons[i].addEventListener('click', function () {
+                modeButtons[0].classList.remove('selected');
+                modeButtons[1].classList.remove('selected');
+                this.classList.add('selected');
+                this.textContent === "Easy" ? numSquares = 3 : numSquares = 6;
+                reset();
+            });
         }
+    }
+
+    function setupSquares(){
+        for (let i = 0; i < squares.length; i++) {
+            squares[i].addEventListener('click', function () {
+                let clickedColor = this.style.background;
+                if (clickedColor === pickedColor) {
+                    messageDisplay.textContent = "Correct!";
+                    resetButton.textContent = "Play Again?";
+                    changeColor(clickedColor);
+                    h1.style.background = clickedColor;
+                } else {
+                    this.style.background = "#232323";
+                    messageDisplay.textContent = "Try again";
+                }
+            })
+        }
+    }
+    
+    function reset(){
+        arrColors = generateRandonColors(numSquares);
+        pickedColor = pickColor();
+        colorDisplay.textContent = pickedColor;
+        resetButton.textContent = "New Colors";
+        messageDisplay.textContent = "";
+        for (let i = 0; i < squares.length; i++) {
+            if(arrColors[i]){
+                squares[i].style.display = 'block';
+                squares[i].style.background = arrColors[i];
+            }
+            else{
+                squares[i].style.background = 'none';
+            }
+        }
+        h1.style.background = 'steelblue';
+    }
+
+    resetButton.addEventListener('click', function(){
+        reset();
+    })
+    //try commit
+
+    function changeColor(color){
+        for (let i = 0; i < squares.length; i++) {
+            if (arrColors[i]) {                
+                squares[i].style.background = color;
+            }
+        }    
     }
 
     function pickColor(){
