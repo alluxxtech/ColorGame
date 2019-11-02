@@ -8,6 +8,7 @@ window.onload = () => {
     //     "rgb(255, 0, 255)",
     // ]
     let numSquares = 6;
+    // hello
     let arrColors = [];
     let pickedColor;
     let squares = document.querySelectorAll('.square');
